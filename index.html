@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KFE + KFE FA | All Data</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" type="text/css" />
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.7.1.js"
+    ></script>
+    <script
+      src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"
+      charset="utf-8"
+    ></script>
+  </head>
+  <body>
+    <h1>Klamath Forest Estates + KFE First Addition -- Vacant Unimproved</h1>
+    <p>Go to <a href="sale_data.html">only properties with sale data</a></p>
+    <hr>
+    <table id="dataTable" class="display" width="100%">
+      <thead>
+      <tr>
+        <th>Property ID</th>
+        <th>Sale Year</th>
+        <th>Acreage</th>
+        <th>Sale Price</th>
+        <th>Appraisal Price</th>
+        <th>Sale $/acre</th>
+        <th>Appraisal $/acre</th>
+        <th>Sale per-acre Delta of Appraisal</th>
+        <th>Owner Name</th>
+        <th>Owner State</th>
+      </tr>
+      </thead>
+
+    </table>
+    <p>Sourced from <a href="https://kcgis.maps.arcgis.com/home/index.html">Klamath County Public GIS data</a>.</p>
+
+    <script type="text/javascript">
+      const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+
+  // These options are needed to round to whole numbers if that's what you want.
+  minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+});
+
+      fetch("./Klamath Forest Estates + First Addition Property Dump.json")
+        .then((response) => response.json())
+        .then((data) =>
+          data.map((property) => {
+            const saleDate = new Date(0);
+            saleDate.setUTCMilliseconds(property.SALE_DATE);
+            const saleYear = saleDate.toISOString().split('T')[0];
+
+            return {
+              property_id: property.PROP_ID,
+              sale_price: property.SALE_PRICE,
+              sale_year: saleYear,
+              acreage: property.ACREAGE,
+              dollars_per_acre: Math.round(
+                property.SALE_PRICE / property.ACREAGE
+              ),
+              appraisal_price: property.LND_APPR,
+              appraisal_dollars_per_acre: Math.round(
+                property.LND_APPR / property.ACREAGE
+              ),
+              sale_per_acre_delta_of_appraisal: Math.round(
+                (property.SALE_PRICE /
+                  property.ACREAGE /
+                  (property.LND_APPR / property.ACREAGE)) *
+                  100
+              ),
+              owner_name: property.OWNER_NAME,
+              owner_state: property.MAILST,
+              owner_city: property.MAILCITY,
+              lat: property.INSIDE_Y,
+              lon: property.INSIDE_X
+            };
+          })
+        )
+        .then((data) => {
+          document.querySelector("#dataTable").innerHTML += data.map((property) =>
+            `
+            <tr>
+              <td><a href="https://assessor.klamathcounty.org/PSO/detail/${property.property_id}/R" target="_blank">${property.property_id}</a></td>
+              <td>${property.sale_year}</td>
+              <td><a href="https://www.google.com/maps/place/${property.lat},${property.lon}" target="_blank">${property.acreage}</a></td>
+              <td>${formatter.format(property.sale_price)}</td>
+              <td>${formatter.format(property.appraisal_price)}</td>
+              <td>${formatter.format(property.dollars_per_acre)}</td>
+              <td>${formatter.format(property.appraisal_dollars_per_acre)}</td>
+              <td>${property.sale_per_acre_delta_of_appraisal}%</td>
+              <td>${property.owner_name}</td>
+              <td>${property.owner_state} [${property.owner_city}]</td>
+            </tr>`
+          ).join('');
+        })
+        .then((data) => {
+          $(document).ready(function () {
+            $("#dataTable").DataTable();
+          });
+        });
+    </script>
+  </body>
+</html>
