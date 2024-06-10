@@ -3,7 +3,15 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KFE + KFE FA | Sale Data Only</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
+    />
     <script
       type="text/javascript"
       src="https://code.jquery.com/jquery-3.7.1.js"
@@ -14,42 +22,61 @@
     ></script>
   </head>
   <body>
-    <h1>Klamath Forest Estates + KFE First Addition -- Vacant Unimproved Sales Data Only</h1>
+    <a
+      class="github-fork-ribbon"
+      href="https://github.com/jkingsman/Klamath-Forest-Estates-Property-Data"
+      data-ribbon="Fork me on GitHub"
+      title="Fork me on GitHub"
+      >Fork me on GitHub</a
+    >
+
+    <h1>
+      Klamath Forest Estates + KFE First Addition -- Vacant Unimproved Sales
+      Data Only
+    </h1>
     <p>Go to</p>
     <ul>
       <li><a href="index.html">all vacant unimproved properties</a></li>
       <li>only vacant unimproved properties with sale data [you are here]</li>
-      <li><a href="all_kfe.html">all KFE + KFE FA properties regardless of improvement</a></li>
+      <li>
+        <a href="all_kfe.html"
+          >all KFE + KFE FA properties regardless of improvement</a
+        >
+      </li>
     </ul>
-    <hr>
+    <hr />
     <table id="dataTable" class="display" width="100%">
       <thead>
-      <tr>
-        <th>Property ID</th>
-        <th>Sale Year</th>
-        <th>Acreage</th>
-        <th>Sale Price</th>
-        <th>Appraisal Price</th>
-        <th>Sale $/acre</th>
-        <th>Appraisal $/acre</th>
-        <th>Sale per-acre Delta of Appraisal</th>
-        <th>Owner Name</th>
-        <th>Owner State</th>
-      </tr>
+        <tr>
+          <th>Property ID</th>
+          <th>Sale Year</th>
+          <th>Acreage</th>
+          <th>Sale Price</th>
+          <th>Appraisal Price</th>
+          <th>Sale $/acre</th>
+          <th>Appraisal $/acre</th>
+          <th>Sale per-acre Delta of Appraisal</th>
+          <th>Owner Name</th>
+          <th>Owner State</th>
+        </tr>
       </thead>
-
     </table>
-    <p>Sourced from <a href="https://kcgis.maps.arcgis.com/home/index.html">Klamath County Public GIS data</a>.</p>
+    <p>
+      Sourced from
+      <a href="https://kcgis.maps.arcgis.com/home/index.html"
+        >Klamath County Public GIS data</a
+      >.
+    </p>
 
     <script type="text/javascript">
-      const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
 
-  // These options are needed to round to whole numbers if that's what you want.
-  minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-  maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-});
+        // These options are needed to round to whole numbers if that's what you want.
+        minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+        maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+      });
 
       fetch("./Klamath Forest Estates + First Addition Property Dump.json")
         .then((response) => response.json())
@@ -63,7 +90,7 @@
           data.map((property) => {
             const saleDate = new Date(0);
             saleDate.setUTCMilliseconds(property.SALE_DATE);
-            const saleYear = saleDate.toISOString().split('T')[0];
+            const saleYear = saleDate.toISOString().split("T")[0];
 
             return {
               property_id: property.PROP_ID,
@@ -92,12 +119,18 @@
           })
         )
         .then((data) => {
-          document.querySelector("#dataTable").innerHTML += data.map((property) =>
-            `
+          document.querySelector("#dataTable").innerHTML += data
+            .map(
+              (property) =>
+                `
             <tr>
-              <td><a href="https://assessor.klamathcounty.org/PSO/detail/${property.property_id}/R" target="_blank">${property.property_id}</a></td>
+              <td><a href="https://assessor.klamathcounty.org/PSO/detail/${
+                property.property_id
+              }/R" target="_blank">${property.property_id}</a></td>
               <td>${property.sale_year}</td>
-              <td><a href="https://www.google.com/maps/place/${property.lat},${property.lon}" target="_blank">${property.acreage}</a></td>
+              <td><a href="https://www.google.com/maps/place/${property.lat},${
+                  property.lon
+                }" target="_blank">${property.acreage}</a></td>
               <td>${formatter.format(property.sale_price)}</td>
               <td>${formatter.format(property.appraisal_price)}</td>
               <td>${formatter.format(property.dollars_per_acre)}</td>
@@ -106,7 +139,8 @@
               <td>${property.owner_name}</td>
               <td>${property.owner_state} [${property.owner_city}]</td>
             </tr>`
-          ).join('');
+            )
+            .join("");
         })
         .then((data) => {
           $(document).ready(function () {
