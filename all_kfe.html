@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KFE + KFE FA | All Data</title>
+    <title>KFE + KFE FA | Sale Data Only</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" type="text/css" />
     <script
       type="text/javascript"
@@ -14,12 +14,12 @@
     ></script>
   </head>
   <body>
-    <h1>Klamath Forest Estates + KFE First Addition -- Vacant Unimproved</h1>
-        <p>Go to</p>
+    <h1>Klamath Forest Estates + KFE First Addition -- All KFE + KFE FA Data</h1>
+    <p>Go to</p>
     <ul>
-      <li>all vacant unimproved properties [you are here]</li>
+      <li><a href="index.html">all vacant unimproved properties</a></li>
       <li><a href="sale_data.html">only vacant unimproved properties with sale data</a></li>
-      <li><a href="all_kfe.html">all KFE + KFE FA properties regardless of improvement</a></li>
+      <li>all KFE + KFE FA properties regardless of improvement [you are here]</li>
     </ul>
     <hr>
     <table id="dataTable" class="display" width="100%">
@@ -81,7 +81,7 @@
               owner_state: property.MAILST,
               owner_city: property.MAILCITY,
               lat: property.INSIDE_Y,
-              lon: property.INSIDE_X
+              lon: property.INSIDE_X,
             };
           })
         )
