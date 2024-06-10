@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
 import json
 import csv
 
@@ -26,9 +25,6 @@ with open('raw_gis_feature_dump.json') as f:
                 cleaned_prop_entry[key] = actual_property[key].strip()
             else:
                 cleaned_prop_entry[key] = actual_property[key]
-
-            if key == "SALE_DATE" and cleaned_prop_entry[key]:
-                cleaned_prop_entry["SALE_DATE_PARSED"] = datetime.fromtimestamp(cleaned_prop_entry[key] / 1000).strftime('%Y-%m-%d')
 
         cleaned_property_list.append(cleaned_prop_entry)
 
