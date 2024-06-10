@@ -40,7 +40,7 @@
       </li>
       <li>
         <a href="all_kfe.html"
-          >all KFE + KFE FA properties regardless of improvement</a
+          >all properties regardless of improvement</a
         >
       </li>
     </ul>
@@ -80,6 +80,9 @@
 
       fetch("./Klamath Forest Estates + First Addition Property Dump.json")
         .then((response) => response.json())
+        .then((data) =>
+          data.filter((property) => property.PCLSD === "RURAL VACANT")
+        )
         .then((data) =>
           data.map((property) => {
             const saleDate = new Date(0);
