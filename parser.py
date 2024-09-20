@@ -13,7 +13,7 @@ with open('raw_gis_feature_dump.json') as f:
     # clean it up
     cleaned_property_list = []
 
-    for property in d:
+    for property in d['features']:
         actual_property = property['attributes']
         cleaned_prop_entry = {}
 
@@ -29,11 +29,12 @@ with open('raw_gis_feature_dump.json') as f:
         cleaned_property_list.append(cleaned_prop_entry)
 
     # DUMP CSV
-    # keys = cleaned_property_list[0].keys()
-    # with open('Klamath Forest Estates + First Addition Property Dump.csv', 'w', newline='') as output_file:
-    #     dict_writer = csv.DictWriter(output_file, keys)
-    #     dict_writer.writeheader()
-    #     dict_writer.writerows(cleaned_property_list)
+    keys = cleaned_property_list[0].keys()
+    with open('Klamath Forest Estates + First Addition Property Dump.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(cleaned_property_list)
+
     # DUMP JSON
     with open('Klamath Forest Estates + First Addition Property Dump.json', 'w') as f:
         json.dump(cleaned_property_list, f)
