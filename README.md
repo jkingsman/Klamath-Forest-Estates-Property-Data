@@ -6,4 +6,4 @@ See https://jkingsman.github.io/Klamath-Forest-Estates-Property-Data/.
 
 JSON dumps from the ArcGIS search endpoint are processed by `parser.py` into clean JSON for frontend consumption.
 
-Data current as of 2024-06.
+Data current as of 2024-11.
